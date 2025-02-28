@@ -28,7 +28,7 @@ transform = transforms.Compose([
 
 # face recognize
 def Face_recognition(image):
-    # 加载图像
+    # load image
     if image is None:
         print("filtpath wrong.")
     else:
@@ -306,21 +306,21 @@ def file_face_recognition():
         print("cant recognize")
 
 def capture_face_recognition():
-    # 打开摄像头
+    # open teh capture
     video_capture = cv2.VideoCapture(0)
     
     try:
         while True:
-            # 读取摄像头的帧
+            # read the frame of the camera
             ret, frame = video_capture.read()
 
-            # 将帧转换为灰度图像
+            # Converts the frame to a grayscale image
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-            # 人脸检测
+            # face detection
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-            # 在图像上绘制方框和类别名
+            # Draw boxes and category names on the image
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 cv2.putText(frame, 'Face', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
@@ -328,34 +328,34 @@ def capture_face_recognition():
                 if recognized_label is not None:
                     cv2.putText(frame, recognized_label, (x, y-40), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-            # 显示结果图像
+            # show the image
             cv2.imshow('Video', frame)
 
-            # 检查摄像头资源情况
+            # if'q',quit
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-            # 获取当前摄像头的资源使用情况
+            # Get the resource usage of the current camera
             used_percentage = psutil.virtual_memory().percent
 
-            # 设置资源占用阈值
+            # set the resource threshold
             threshold_percentage = 80
 
-            # 如果摄像头资源占用超过阈值，自动关闭摄像头
+            
             if used_percentage > threshold_percentage:
-                print("摄像头资源占用过多，自动关闭摄像头")
-                # 释放摄像头和关闭窗口
+                print("the camera resource is occupied too much, the camera will be automatically turned off")
+                # 
                 video_capture.release()
                 cv2.destroyAllWindows()
                 break
             
 
     except Exception as e:
-        print("识别结果:", recognized_label)
+        print("result:", recognized_label)
         print(f"Error: {e}")
 
     finally:
-        # 释放摄像头和关闭窗口
+        # close
         video_capture.release()
         cv2.destroyAllWindows()
             
